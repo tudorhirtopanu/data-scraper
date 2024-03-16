@@ -37,6 +37,7 @@ async function run(query){
 
     await page.waitForSelector('.rg_i');
 
+    previousPageHeight = 0;
     // Loop to scroll down to load images
     for (let i = 0; i < 21; i++) {
         await page.evaluate(() => {
@@ -61,6 +62,18 @@ async function run(query){
             // The element is not clickable
             console.log("Element is not clickable");
         }
+
+        // Check if the end has been reached
+        const pageHeight = await page.evaluate(() => {
+            return document.body.scrollHeight;
+        });
+        
+        console.log("Height of the full page:", pageHeight);
+        if(previousPageHeight == pageHeight){
+            console.log("END REACHED");
+            break;
+        }
+        previousPageHeight = pageHeight;
   
       }
   
