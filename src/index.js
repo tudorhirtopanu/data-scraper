@@ -1,9 +1,9 @@
+
 const puppeteer = require('puppeteer')
 const fs = require('fs');
+const downloadImage = require('./download');
 
 async function run(query){
-    // TODO: Add error handling if a node is not clickable or an element
-    // TODO: Check if has reached the bottom
 
     // launch a browser instance
     const browser = await puppeteer.launch({
@@ -38,8 +38,9 @@ async function run(query){
     await page.waitForSelector('.rg_i');
 
     previousPageHeight = 0;
-    // Loop to scroll down to load images
-    for (let i = 0; i < 21; i++) {
+
+    // Loop to scroll down to load images ///////////////////
+    for (let i = 0; i < 2; i++) {
         await page.evaluate(() => {
             window.scrollTo(0, document.body.scrollHeight);
         });
@@ -78,6 +79,8 @@ async function run(query){
       }
   
     var count = 0;
+
+    // Fetch the src of each image //////////////////////
     const imageContainer = await page.$('#islmp');
     if (imageContainer) {
         const images = await imageContainer.$$('.rg_i'); // Select all the images within the container
@@ -90,8 +93,11 @@ async function run(query){
             return image.getAttribute('src');
         }, images[i]);
 
-        //console.log("Image src:", src);
-            count++;
+        console.log("Image src:", src);
+
+        // TODO: save image with query name?
+        await downloadImage(src, i);
+        count++;
 
         }
     } else {
