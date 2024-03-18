@@ -3,15 +3,16 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-//TODO: Specify the path of download
-async function downloadImage(url, num){
+async function downloadImage(url, imageName, outputPath){
+
     // URL of the image you want to download
     const imageUrl = url;
 
     // Path where you want to save the downloaded image
-    const desktopPath = path.join(os.homedir(), 'Documents');
-    // Path where you want to save the downloaded image on desktop
-    const imagePath = path.join(desktopPath, 'downloaded_image'+num+'.jpg');
+    //const dirPath = path.join(os.homedir(), 'Documents/HVDD-RAW');
+
+    // Path to save the downloaded image
+    const imagePath = path.join(outputPath, imageName+'.jpg');
 
     try {
         const response = await axios({
@@ -20,15 +21,15 @@ async function downloadImage(url, num){
         });
         // Pipe the image data directly to a file
         response.data.pipe(fs.createWriteStream(imagePath));
-        console.log('Image downloaded successfully.');
+        //console.log('Image downloaded successfully.');
     } catch (error) {
         console.error('Error downloading image:', error);
     }
 }
 
 const imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwIjZf0DSKb1hq3ZKcamyGTeWag6AWsNs5bg&usqp=CAU';
-
-//downloadImage(imageUrl, 200);
+const outputPath = "/Users/tudor/Documents/HVDD-RAW"
+//downloadImage(imageUrl, "testImage2", outputPath);
 
 module.exports = downloadImage;
 
